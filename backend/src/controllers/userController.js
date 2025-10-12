@@ -91,3 +91,6 @@ const login = async (req, res) => {
       .json({ success: false, message: `Something went wrong: ${error.message}` });
   }
 };
+
+
+export {login,register}

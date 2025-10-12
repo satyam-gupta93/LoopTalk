@@ -5,6 +5,7 @@ import { Server } from "socket.io";
 import mongoose from "mongoose";
 import cors from "cors";
 import connectTosocket from "./controllers/socketManger.js";
+import UserRouter from "./routes/userRoutes.js";
 
 // load env
 dotenv.config();
@@ -26,6 +27,7 @@ const io = connectTosocket(server);
 app.get("/home",(req,res)=>{
     return res.json({"hello":"world"})
 })
+app.use("/api/user",UserRouter)
 
 const start = async() =>{
 

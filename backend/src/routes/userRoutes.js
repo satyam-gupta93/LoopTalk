@@ -1,9 +1,19 @@
 import { Router } from "express";
+import { login, register } from "../controllers/userController.js";
 
+const UserRouter = Router();
 
-const router = Router();
+// Auth Routes
+UserRouter.post("/login", login);
+UserRouter.post("/register", register);
 
-router.route("/login");
-router.route("/register")
-router.route("/add-to-activity")
-router.route("/get-all-activity")
+// Activity Routes (add later)
+UserRouter.post("/add-to-activity", (req, res) => {
+  res.status(200).json({ message: "Add to activity endpoint (to be implemented)" });
+});
+
+UserRouter.get("/get-all-activity", (req, res) => {
+  res.status(200).json({ message: "Get all activity endpoint (to be implemented)" });
+});
+
+export default UserRouter;
