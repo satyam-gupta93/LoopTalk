@@ -1,5 +1,6 @@
 
 import React, { useState } from 'react';
+import { useNavigate } from 'react-router-dom'
 import {
   Video,
   Users,
@@ -15,7 +16,10 @@ import {
 export default function LandingPage() {
   const [mobileMenuOpen, setMobileMenuOpen] = useState(false);
 
+  const navigate = useNavigate();
   const handleNavigation = (path) => {
+    navigate(path)
+    scrollTo(0, 0)
     console.log(`Navigating to ${path}`);
   };
 
@@ -26,7 +30,7 @@ export default function LandingPage() {
         <div className="max-w-7xl mx-auto px-4 sm:px-6 lg:px-8">
           <div className="flex justify-between items-center h-16">
             {/* Logo */}
-            <div className="flex items-center gap-3">
+            <div className="flex items-center gap-3 cursor-pointer" onClick={() => {handleNavigation("/"); }} >
               <div className="w-9 h-9 rounded-lg bg-emerald-600 flex items-center justify-center">
                 <Video className="w-5 h-5 text-white" />
               </div>
