@@ -38,22 +38,22 @@ export default function LandingPage() {
             </div>
 
             {/* Desktop Menu */}
-            <div className="hidden md:flex items-center gap-8">
+            <div className="hidden md:flex items-center gap-8 ">
               <button
                 onClick={() => handleNavigation("/aljk23")}
-                className="text-slate-300 hover:text-white transition"
+                className="text-slate-300 hover:text-white transition cursor-pointer"
               >
                 Join as Guest
               </button>
               <button
                 onClick={() => handleNavigation("/auth")}
-                className="text-slate-300 hover:text-white transition"
+                className="text-slate-300 hover:text-white transition cursor-pointer"
               >
                 Register
               </button>
               <button
                 onClick={() => handleNavigation("/auth")}
-                className="px-6 py-2.5 rounded-lg bg-emerald-600 hover:bg-emerald-700 text-white font-medium transition"
+                className="px-6 py-2.5 rounded-lg bg-emerald-600 cursor-pointer hover:bg-emerald-700 text-white font-medium transition"
               >
                 Login
               </button>
@@ -103,8 +103,8 @@ export default function LandingPage() {
         </div>
       </nav>
 
-      {/* ---------------- HERO SECTION ---------------- */}
-     {/* ---------------- HERO SECTION ---------------- */}
+      
+     {/*HERO SECTION*/}
 <section className="pt-45 pb-41 px-4 bg-slate-950 mt-2 ">
   <div className="max-w-7xl mx-auto">
     <div className="grid md:grid-cols-2 gap-16 items-center">
@@ -124,13 +124,13 @@ export default function LandingPage() {
         <div className="flex flex-col sm:flex-row gap-4">
           <button
             onClick={() => handleNavigation("/auth")}
-            className="inline-flex items-center justify-center gap-2 px-8 py-4 rounded-lg bg-emerald-600 hover:bg-emerald-700 text-white font-medium text-lg transition"
+            className="inline-flex items-center justify-center gap-2 px-8 py-4 rounded-lg cursor-pointer bg-emerald-600 hover:bg-emerald-700 text-white font-medium text-lg transition"
           >
             Get Started Free <ArrowRight size={20} />
           </button>
           <button
             onClick={() => handleNavigation("/aljk23")}
-            className="inline-flex items-center justify-center gap-2 px-8 py-4 rounded-lg border-2 border-slate-700 hover:border-emerald-600 text-white font-medium text-lg transition"
+            className="inline-flex items-center justify-center gap-2 cursor-pointer px-8 py-4 rounded-lg border-2 border-slate-700 hover:border-emerald-600 text-white font-medium text-lg transition"
           >
             Join as Guest
           </button>
@@ -196,7 +196,7 @@ export default function LandingPage() {
   </div>
 </section>
 
-      {/* ---------------- FEATURES SECTION ---------------- */}
+      {/* FEATURES SECTION*/}
       <section className="py-20 px-4 bg-slate-900/50 border-y border-slate-800">
         <div className="max-w-7xl mx-auto">
           <div className="text-center mb-16">
@@ -260,7 +260,7 @@ export default function LandingPage() {
         </div>
       </section>
 
-      {/* ---------------- CTA SECTION ---------------- */}
+      {/*  CTA SECTION */}
       <section className="py-20 px-4">
         <div className="max-w-4xl mx-auto text-center">
           <h2 className="text-4xl font-bold mb-6 text-white">
@@ -272,13 +272,13 @@ export default function LandingPage() {
           <div className="flex flex-col sm:flex-row gap-4 justify-center">
             <button
               onClick={() => handleNavigation("/auth")}
-              className="px-8 py-4 rounded-lg bg-emerald-600 hover:bg-emerald-700 text-white font-medium text-lg transition"
+              className="px-8 py-4 rounded-lg bg-emerald-600 cursor-pointer hover:bg-emerald-700 text-white font-medium text-lg transition"
             >
               Get Started Now
             </button>
             <button
               onClick={() => handleNavigation("/aljk23")}
-              className="px-8 py-4 rounded-lg border-2 border-slate-700 hover:border-emerald-600 text-white font-medium text-lg transition"
+              className="px-8 py-4 rounded-lg border-2 border-slate-700 cursor-pointer hover:border-emerald-600 text-white font-medium text-lg transition"
             >
               Join as Guest
             </button>
@@ -286,7 +286,7 @@ export default function LandingPage() {
         </div>
       </section>
 
-      {/* ---------------- FOOTER ---------------- */}
+      {/*  FOOTER */}
       <footer className="border-t border-slate-800 py-12 px-4 bg-slate-950">
         <div className="max-w-7xl mx-auto">
           <div className="grid md:grid-cols-4 gap-8 mb-8">
