@@ -291,7 +291,7 @@ export default function LandingPage() {
         <div className="max-w-7xl mx-auto">
           <div className="grid md:grid-cols-4 gap-8 mb-8">
             <div>
-              <div className="flex items-center gap-2 mb-4">
+              <div className="flex items-center gap-2 mb-4 cursor-pointer" onClick={() => handleNavigation("/")}>
                 <div className="w-8 h-8 rounded-lg bg-emerald-600 flex items-center justify-center">
                   <Video className="w-5 h-5 text-white" />
                 </div>

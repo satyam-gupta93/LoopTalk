@@ -1,6 +1,6 @@
 import React, { useState, useContext } from 'react';
 import { Video, LockKeyhole, User, Mail, Eye, EyeOff } from 'lucide-react';
-// import { AuthContext } from '../contexts/AuthContext';
+import { AuthContext } from '../contexts/AuthContext';
 
 export default function Authentication() {
   const [username, setUsername] = useState('');
@@ -12,7 +12,30 @@ export default function Authentication() {
   const [showPassword, setShowPassword] = useState(false);
   const [showSnackbar, setShowSnackbar] = useState(false);
 
+  const { handleRegister, handleLogin } = useContext(AuthContext);
 
+  const handleAuth = async () => {
+    try {
+      if (formState === 0) {
+        await handleLogin(username, password);
+      }
+      if (formState === 1) {
+        const result = await handleRegister(name, username, password);
+        setUsername('');
+        setName('');
+        setPassword('');
+        setMessage(result);
+        setShowSnackbar(true);
+        setError('');
+        setFormState(0);
+        setTimeout(() => setShowSnackbar(false), 4000);
+      }
+    } catch (err) {
+      console.log(err);
+      const errorMessage = err?.response?.data?.message || 'An error occurred';
+      setError(errorMessage);
+    }
+  };
 
   const handleKeyPress = (e) => {
     if (e.key === 'Enter') {
@@ -148,7 +171,7 @@ export default function Authentication() {
                   type={showPassword ? 'text' : 'password'}
                   value={password}
                   onChange={(e) => setPassword(e.target.value)}
-                  // onKeyPress={handleKeyPress}
+                  onKeyPress={handleKeyPress}
                   placeholder="Enter your password"
                   className="w-full pl-11 pr-12 py-3 bg-slate-900 border border-slate-800 rounded-lg text-white placeholder-slate-500 focus:outline-none focus:border-emerald-600 focus:ring-1 focus:ring-emerald-600 transition"
                 />
@@ -171,7 +194,7 @@ export default function Authentication() {
 
             {/* Submit Button */}
             <button
-              // onClick={handleAuth}
+              onClick={handleAuth}
               className="w-full py-3 px-6 bg-emerald-600 hover:bg-emerald-700 text-white font-medium rounded-lg transition focus:outline-none focus:ring-2 focus:ring-emerald-500 focus:ring-offset-2 focus:ring-offset-slate-950"
             >
               {formState === 0 ? 'Sign In' : 'Create Account'}
