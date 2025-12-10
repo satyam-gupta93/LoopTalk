@@ -1,5 +1,29 @@
 
+import React, { useEffect, useRef, useState } from 'react'
+import io from "socket.io-client";
+import { 
+  Video,
+  VideoOff,
+  Mic,
+  MicOff,
+  PhoneOff,
+  MonitorUp,
+  MonitorX,
+  MessageSquare,
+  Send,
+  X
+} from 'lucide-react';
 
+const server_url = "http://localhost:8000";
+
+
+var connections = {};
+
+const peerConfigConnections = {
+    "iceServers": [
+        { "urls": "stun:stun.l.google.com:19302" }
+    ]
+}
 function VideoMeet() {
 
   const [askForUsername, setAskForUsername] = useState(true);
@@ -49,7 +73,11 @@ function VideoMeet() {
         </div>
       </div>
     ) : (
-      <></>
+          <div className="p-4 grid grid-cols-1 md:grid-cols-2 lg:grid-cols-3 gap-4">
+      {videos.map(v => (
+        <div key={v.socketId} className="bg-slate-800 h-96 rounded-xl" />
+      ))}
+    </div>
     )}
 
     </div>
