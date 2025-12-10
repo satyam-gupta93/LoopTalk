@@ -16,6 +16,15 @@ function VideoMeet() {
   const handleAudio = () => console.log("toggle audio");
   const handleEndCall = () => console.log("end call");
   const handleScreen = () => console.log("screen share");
+
+    useEffect(() => {
+    setVideos([
+      { socketId: "1", stream: null },
+      { socketId: "2", stream: null },
+      { socketId: "3", stream: null },
+    ]);
+  }, []);
+
   return (
     <div className="min-h-screen bg-slate-950">
           {askForUsername ? (
