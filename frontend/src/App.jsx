@@ -11,14 +11,14 @@ function App() {
   return (
     <div className="App">
       <Router>
-        {/* Wrap routes with AuthProvider if needed */}
+        {/* Wrap routes with AuthProvider  */}
         <AuthProvider>
         <Routes>
           <Route path='/' element={<LandingPage />} />
           <Route path='/auth' element={<Authentication />} />
-          {/* <Route path='/home' element={<Home />} /> */}
+          <Route path='/home' element={<Home />} />
           {/* <Route path='/history' element={<History />} /> */}
-          {/* <Route path='/:url' element={<VideoMeet />} /> */}
+          <Route path='/:url' element={<VideoMeet />} />
         </Routes>
         </AuthProvider>
       </Router>

@@ -1,9 +1,9 @@
-import React from 'react'
-
-const VideoMeet = () => {
+function VideoMeet() {
   return (
-    <div>VideoMeet</div>
-  )
+    <div className="min-h-screen bg-slate-950">
+      {/* UI will be added in further steps */}
+    </div>
+  );
 }
 
-export default VideoMeet
+export default VideoMeet;
