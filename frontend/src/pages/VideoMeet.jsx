@@ -79,6 +79,13 @@ function VideoMeet() {
       ))}
     </div>
     )}
+      <div className="flex justify-center gap-3 p-4">
+    <button onClick={handleVideo} className="p-4 bg-slate-800 text-white rounded-xl">Video</button>
+    <button onClick={handleAudio} className="p-4 bg-slate-800 text-white rounded-xl">Mic</button>
+    <button onClick={handleEndCall} className="p-4 bg-red-600 text-white rounded-xl">End</button>
+    <button onClick={() => setModal(true)} className="p-4 bg-slate-800 text-white rounded-xl">Chat</button>
+  </div>
+
 
     </div>
   );
