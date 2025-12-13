@@ -20,8 +20,17 @@ export default function LandingPage() {
   const [mobileMenuOpen, setMobileMenuOpen] = useState(false);
   const [isAuthenticated, setIsAuthenticated] = useState(false);
   const [showProfileMenu, setShowProfileMenu] = useState(false);
+  const [currentTime, setCurrentTime] = useState(new Date());
 
   const navigate = useNavigate();
+
+  // Update time every second
+  useEffect(() => {
+    const timer = setInterval(() => {
+      setCurrentTime(new Date());
+    }, 1000);
+    return () => clearInterval(timer);
+  }, []);
 
   // Check if user is authenticated on component mount
   useEffect(() => {
@@ -61,8 +70,20 @@ export default function LandingPage() {
               <h2 className="text-xl font-semibold text-white">Loop Talk</h2>
             </div>
 
-            {/* Desktop Menu */}
             <div className="hidden md:flex items-center gap-8">
+              {/* Real-time Clock */}
+              <div className="text-slate-400 text-sm font-light">
+                {currentTime.toLocaleTimeString('en-US', { 
+                  hour: '2-digit', 
+                  minute: '2-digit',
+                  hour12: false 
+                })} • {currentTime.toLocaleDateString('en-US', { 
+                  weekday: 'short',
+                  day: 'numeric',
+                  month: 'short'
+                })}
+              </div>
+              
               {!isAuthenticated ? (
                 <>
                   <button
@@ -309,6 +330,18 @@ export default function LandingPage() {
                   <div className="absolute top-4 left-4 flex items-center gap-2 px-3 py-1.5 rounded-full bg-slate-900/90 border border-slate-700">
                     <div className="w-2 h-2 rounded-full bg-emerald-400 animate-pulse"></div>
                     <span className="text-xs text-white font-medium">Connected</span>
+                  </div>
+
+                  {/* Real-time Clock */}
+                  <div className="absolute top-4 right-4">
+                    <span className="text-xs text-slate-400 font-light font-mono">
+                      {currentTime.toLocaleTimeString('en-US', { 
+                        hour: '2-digit', 
+                        minute: '2-digit',
+                        second: '2-digit',
+                        hour12: false 
+                      })}
+                    </span>
                   </div>
                 </div>
 
