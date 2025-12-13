@@ -1,6 +1,6 @@
 
-import React, { useState } from 'react';
-import { useNavigate } from 'react-router-dom'
+import React, { useState, useEffect } from 'react';
+import { useNavigate } from 'react-router-dom';
 import {
   Video,
   Users,
@@ -11,26 +11,50 @@ import {
   X,
   Shield,
   Globe,
+  User,
+  LogOut,
+  Clock,
 } from 'lucide-react';
 
 export default function LandingPage() {
   const [mobileMenuOpen, setMobileMenuOpen] = useState(false);
+  const [isAuthenticated, setIsAuthenticated] = useState(false);
+  const [showProfileMenu, setShowProfileMenu] = useState(false);
 
   const navigate = useNavigate();
+
+  // Check if user is authenticated on component mount
+  useEffect(() => {
+    const token = localStorage.getItem('token');
+    setIsAuthenticated(!!token);
+  }, []);
+
   const handleNavigation = (path) => {
-    navigate(path)
-    scrollTo(0, 0)
+    navigate(path);
+    scrollTo(0, 0);
     console.log(`Navigating to ${path}`);
   };
 
+  const handleLogout = () => {
+    localStorage.removeItem('token');
+    setIsAuthenticated(false);
+    setShowProfileMenu(false);
+    handleNavigation('/');
+  };
+
   return (
-    <div className="min-h-screen bg-slate-950 text-white ">
+    <div className="min-h-screen bg-slate-950 text-white">
       {/* ---------------- NAVIGATION ---------------- */}
       <nav className="fixed py-4 w-full top-0 z-50 bg-slate-950/90 backdrop-blur-sm border-b border-slate-800">
         <div className="max-w-7xl mx-auto px-4 sm:px-6 lg:px-8">
           <div className="flex justify-between items-center h-16">
             {/* Logo */}
-            <div className="flex items-center gap-3 cursor-pointer" onClick={() => {handleNavigation("/"); }} >
+            <div
+              className="flex items-center gap-3 cursor-pointer"
+              onClick={() => {
+                handleNavigation('/');
+              }}
+            >
               <div className="w-9 h-9 rounded-lg bg-emerald-600 flex items-center justify-center">
                 <Video className="w-5 h-5 text-white" />
               </div>
@@ -38,25 +62,80 @@ export default function LandingPage() {
             </div>
 
             {/* Desktop Menu */}
-            <div className="hidden md:flex items-center gap-8 ">
-              <button
-                onClick={() => handleNavigation("/aljk23")}
-                className="text-slate-300 hover:text-white transition cursor-pointer"
-              >
-                Join as Guest
-              </button>
-              <button
-                onClick={() => handleNavigation("/auth")}
-                className="text-slate-300 hover:text-white transition cursor-pointer"
-              >
-                Register
-              </button>
-              <button
-                onClick={() => handleNavigation("/auth")}
-                className="px-6 py-2.5 rounded-lg bg-emerald-600 cursor-pointer hover:bg-emerald-700 text-white font-medium transition"
-              >
-                Login
-              </button>
+            <div className="hidden md:flex items-center gap-8">
+              {!isAuthenticated ? (
+                <>
+                  <button
+                    onClick={() => handleNavigation('/aljk23')}
+                    className="text-slate-300 hover:text-white transition cursor-pointer"
+                  >
+                    Join as Guest
+                  </button>
+                  <button
+                    onClick={() => handleNavigation('/auth')}
+                    className="text-slate-300 hover:text-white transition cursor-pointer"
+                  >
+                    Register
+                  </button>
+                  <button
+                    onClick={() => handleNavigation('/auth')}
+                    className="px-6 py-2.5 rounded-lg bg-emerald-600 cursor-pointer hover:bg-emerald-700 text-white font-medium transition"
+                  >
+                    Login
+                  </button>
+                </>
+              ) : (
+                <>
+                  <button
+                    onClick={() => handleNavigation('/home')}
+                    className="text-slate-300 hover:text-white transition cursor-pointer"
+                  >
+                    Dashboard
+                  </button>
+                  <div className="relative">
+                    <button
+                      onClick={() => setShowProfileMenu(!showProfileMenu)}
+                      className="w-10 h-10 rounded-full bg-emerald-600 hover:bg-emerald-700 flex items-center justify-center transition cursor-pointer"
+                    >
+                      <User className="w-5 h-5 text-white" />
+                    </button>
+
+                    {/* Profile Dropdown */}
+                    {showProfileMenu && (
+                      <div className="absolute right-0 mt-2 w-48 bg-slate-900 border border-slate-800 rounded-lg shadow-xl py-2">
+                        <button
+                          onClick={() => {
+                            handleNavigation('/home');
+                            setShowProfileMenu(false);
+                          }}
+                          className="w-full px-4 py-2 text-left text-slate-300 hover:text-white hover:bg-slate-800 transition flex items-center gap-2"
+                        >
+                          <Video className="w-4 h-4" />
+                          Dashboard
+                        </button>
+                        <button
+                          onClick={() => {
+                            handleNavigation('/history');
+                            setShowProfileMenu(false);
+                          }}
+                          className="w-full px-4 py-2 text-left text-slate-300 hover:text-white hover:bg-slate-800 transition flex items-center gap-2"
+                        >
+                          <Clock className="w-4 h-4" />
+                          History
+                        </button>
+                        <div className="border-t border-slate-800 my-2"></div>
+                        <button
+                          onClick={handleLogout}
+                          className="w-full px-4 py-2 text-left text-red-400 hover:text-red-300 hover:bg-slate-800 transition flex items-center gap-2"
+                        >
+                          <LogOut className="w-4 h-4" />
+                          Logout
+                        </button>
+                      </div>
+                    )}
+                  </div>
+                </>
+              )}
             </div>
 
             {/* Mobile Menu Toggle */}
@@ -71,130 +150,175 @@ export default function LandingPage() {
           {/* Mobile Menu */}
           {mobileMenuOpen && (
             <div className="md:hidden pb-4 space-y-3 border-t border-slate-800 pt-4">
-              <button
-                onClick={() => {
-                  handleNavigation("/aljk23");
-                  setMobileMenuOpen(false);
-                }}
-                className="block w-full text-left px-4 py-2 text-slate-300 hover:text-white transition"
-              >
-                Join as Guest
-              </button>
-              <button
-                onClick={() => {
-                  handleNavigation("/auth");
-                  setMobileMenuOpen(false);
-                }}
-                className="block w-full text-left px-4 py-2 text-slate-300 hover:text-white transition"
-              >
-                Register
-              </button>
-              <button
-                onClick={() => {
-                  handleNavigation("/auth");
-                  setMobileMenuOpen(false);
-                }}
-                className="w-full px-4 py-2.5 rounded-lg bg-emerald-600 hover:bg-emerald-700 text-white font-medium transition"
-              >
-                Login
-              </button>
+              {!isAuthenticated ? (
+                <>
+                  <button
+                    onClick={() => {
+                      handleNavigation('/aljk23');
+                      setMobileMenuOpen(false);
+                    }}
+                    className="block w-full text-left px-4 py-2 text-slate-300 hover:text-white transition"
+                  >
+                    Join as Guest
+                  </button>
+                  <button
+                    onClick={() => {
+                      handleNavigation('/auth');
+                      setMobileMenuOpen(false);
+                    }}
+                    className="block w-full text-left px-4 py-2 text-slate-300 hover:text-white transition"
+                  >
+                    Register
+                  </button>
+                  <button
+                    onClick={() => {
+                      handleNavigation('/auth');
+                      setMobileMenuOpen(false);
+                    }}
+                    className="w-full px-4 py-2.5 rounded-lg bg-emerald-600 hover:bg-emerald-700 text-white font-medium transition"
+                  >
+                    Login
+                  </button>
+                </>
+              ) : (
+                <>
+                  <button
+                    onClick={() => {
+                      handleNavigation('/home');
+                      setMobileMenuOpen(false);
+                    }}
+                    className="block w-full text-left px-4 py-2 text-slate-300 hover:text-white transition flex items-center gap-2"
+                  >
+                    <Video className="w-4 h-4" />
+                    Dashboard
+                  </button>
+                  <button
+                    onClick={() => {
+                      handleNavigation('/history');
+                      setMobileMenuOpen(false);
+                    }}
+                    className="block w-full text-left px-4 py-2 text-slate-300 hover:text-white transition flex items-center gap-2"
+                  >
+                    <Clock className="w-4 h-4" />
+                    History
+                  </button>
+                  <button
+                    onClick={() => {
+                      handleLogout();
+                      setMobileMenuOpen(false);
+                    }}
+                    className="w-full px-4 py-2.5 rounded-lg bg-red-600 hover:bg-red-700 text-white font-medium transition flex items-center justify-center gap-2"
+                  >
+                    <LogOut className="w-4 h-4" />
+                    Logout
+                  </button>
+                </>
+              )}
             </div>
           )}
         </div>
       </nav>
 
-      
-     {/*HERO SECTION*/}
-<section className="pt-45 pb-41 px-4 bg-slate-950 mt-2 ">
-  <div className="max-w-7xl mx-auto">
-    <div className="grid md:grid-cols-2 gap-16 items-center">
-      
-      {/* Text Content */}
-      <div className="space-y-8">
-        <div className="space-y-6">
-          <h1 className="text-4xl md:text-5xl font-bold leading-tight text-white">
-            Your meetings, simplified and secure.
-          </h1>
-          <p className="text-lg md:text-xl text-slate-400 leading-relaxed">
-            Connect seamlessly with your team, clients, and friends —
-            all through secure, high-quality video calls.
-          </p>
-        </div>
-
-        <div className="flex flex-col sm:flex-row gap-4">
-          <button
-            onClick={() => handleNavigation("/auth")}
-            className="inline-flex items-center justify-center gap-2 px-8 py-4 rounded-lg cursor-pointer bg-emerald-600 hover:bg-emerald-700 text-white font-medium text-lg transition"
-          >
-            Get Started Free <ArrowRight size={20} />
-          </button>
-          <button
-            onClick={() => handleNavigation("/aljk23")}
-            className="inline-flex items-center justify-center gap-2 cursor-pointer px-8 py-4 rounded-lg border-2 border-slate-700 hover:border-emerald-600 text-white font-medium text-lg transition"
-          >
-            Join as Guest
-          </button>
-        </div>
-
-        {/* Stats */}
-        <div className="grid grid-cols-3 gap-8 pt-10 border-t border-slate-800">
-          <div className="text-center">
-            <p className="text-3xl md:text-4xl font-bold text-white">1M+</p>
-            <p className="text-slate-400 text-sm mt-1">Active Users</p>
-          </div>
-          <div className="text-center">
-            <p className="text-3xl md:text-4xl font-bold text-white">99.9%</p>
-            <p className="text-slate-400 text-sm mt-1">Uptime</p>
-          </div>
-          <div className="text-center">
-            <p className="text-3xl md:text-4xl font-bold text-white">180+</p>
-            <p className="text-slate-400 text-sm mt-1">Countries</p>
-          </div>
-        </div>
-      </div>
-
-      {/* Video Mockup */}
-      <div className="relative flex flex-col items-center justify-center">
-        {/* Trusted Badge */}
-        <div className="mb-6 inline-flex items-center gap-2 px-4 py-2 rounded-full bg-emerald-950 border border-emerald-800 text-emerald-400 text-sm">
-          <div className="w-2 h-2 rounded-full bg-emerald-400 animate-pulse"></div>
-          <span>Trusted by 1M+ users worldwide</span>
-        </div>
-
-        <div className="relative w-full max-w-md">
-          <div className="relative z-10 w-full h-64 md:h-80 rounded-3xl bg-slate-900 border border-slate-800 overflow-hidden shadow-2xl">
-            
-            <div className="absolute inset-0 flex items-center justify-center">
-              <Video className="w-16 h-16 text-emerald-500 animate-pulse" />
-            </div>
-
-            {/* Call Controls */}
-            <div className="absolute bottom-4 left-1/2 transform -translate-x-1/2 flex gap-3">
-              <div className="w-12 h-12 rounded-full bg-slate-800 border border-slate-700 flex items-center justify-center hover:bg-emerald-600 transition cursor-pointer">
-                <Video className="w-5 h-5 text-white" />
+      {/*HERO SECTION*/}
+      <section className="pt-45 pb-41 px-4 bg-slate-950 mt-2">
+        <div className="max-w-7xl mx-auto">
+          <div className="grid md:grid-cols-2 gap-16 items-center">
+            {/* Text Content */}
+            <div className="space-y-8">
+              <div className="space-y-6">
+                <h1 className="text-4xl md:text-5xl font-bold leading-tight text-white">
+                  Your meetings, simplified and secure.
+                </h1>
+                <p className="text-lg md:text-xl text-slate-400 leading-relaxed">
+                  Connect seamlessly with your team, clients, and friends — all
+                  through secure, high-quality video calls.
+                </p>
               </div>
-              <div className="w-12 h-12 rounded-full bg-red-600 flex items-center justify-center hover:bg-red-700 transition cursor-pointer">
-                <X className="w-5 h-5 text-white" />
+
+              <div className="flex flex-col sm:flex-row gap-4">
+                {!isAuthenticated ? (
+                  <>
+                    <button
+                      onClick={() => handleNavigation('/auth')}
+                      className="inline-flex items-center justify-center gap-2 px-8 py-4 rounded-lg cursor-pointer bg-emerald-600 hover:bg-emerald-700 text-white font-medium text-lg transition"
+                    >
+                      Get Started Free <ArrowRight size={20} />
+                    </button>
+                    <button
+                      onClick={() => handleNavigation('/aljk23')}
+                      className="inline-flex items-center justify-center gap-2 cursor-pointer px-8 py-4 rounded-lg border-2 border-slate-700 hover:border-emerald-600 text-white font-medium text-lg transition"
+                    >
+                      Join as Guest
+                    </button>
+                  </>
+                ) : (
+                  <button
+                    onClick={() => handleNavigation('/home')}
+                    className="inline-flex items-center justify-center gap-2 px-8 py-4 rounded-lg cursor-pointer bg-emerald-600 hover:bg-emerald-700 text-white font-medium text-lg transition"
+                  >
+                    Go to Dashboard <ArrowRight size={20} />
+                  </button>
+                )}
               </div>
-              <div className="w-12 h-12 rounded-full bg-slate-800 border border-slate-700 flex items-center justify-center hover:bg-emerald-600 transition cursor-pointer">
-                <Users className="w-5 h-5 text-white" />
+
+              {/* Stats */}
+              <div className="grid grid-cols-3 gap-8 pt-10 border-t border-slate-800">
+                <div className="text-center">
+                  <p className="text-3xl md:text-4xl font-bold text-white">1M+</p>
+                  <p className="text-slate-400 text-sm mt-1">Active Users</p>
+                </div>
+                <div className="text-center">
+                  <p className="text-3xl md:text-4xl font-bold text-white">99.9%</p>
+                  <p className="text-slate-400 text-sm mt-1">Uptime</p>
+                </div>
+                <div className="text-center">
+                  <p className="text-3xl md:text-4xl font-bold text-white">180+</p>
+                  <p className="text-slate-400 text-sm mt-1">Countries</p>
+                </div>
               </div>
             </div>
 
-            {/* Status Badge */}
-            <div className="absolute top-4 left-4 flex items-center gap-2 px-3 py-1.5 rounded-full bg-slate-900/90 border border-slate-700">
-              <div className="w-2 h-2 rounded-full bg-emerald-400 animate-pulse"></div>
-              <span className="text-xs text-white font-medium">Connected</span>
+            {/* Video Mockup */}
+            <div className="relative flex flex-col items-center justify-center">
+              {/* Trusted Badge */}
+              <div className="mb-6 inline-flex items-center gap-2 px-4 py-2 rounded-full bg-emerald-950 border border-emerald-800 text-emerald-400 text-sm">
+                <div className="w-2 h-2 rounded-full bg-emerald-400 animate-pulse"></div>
+                <span>Trusted by 1M+ users worldwide</span>
+              </div>
+
+              <div className="relative w-full max-w-md">
+                <div className="relative z-10 w-full h-64 md:h-80 rounded-3xl bg-slate-900 border border-slate-800 overflow-hidden shadow-2xl">
+                  <div className="absolute inset-0 flex items-center justify-center">
+                    <Video className="w-16 h-16 text-emerald-500 animate-pulse" />
+                  </div>
+
+                  {/* Call Controls */}
+                  <div className="absolute bottom-4 left-1/2 transform -translate-x-1/2 flex gap-3">
+                    <div className="w-12 h-12 rounded-full bg-slate-800 border border-slate-700 flex items-center justify-center hover:bg-emerald-600 transition cursor-pointer">
+                      <Video className="w-5 h-5 text-white" />
+                    </div>
+                    <div className="w-12 h-12 rounded-full bg-red-600 flex items-center justify-center hover:bg-red-700 transition cursor-pointer">
+                      <X className="w-5 h-5 text-white" />
+                    </div>
+                    <div className="w-12 h-12 rounded-full bg-slate-800 border border-slate-700 flex items-center justify-center hover:bg-emerald-600 transition cursor-pointer">
+                      <Users className="w-5 h-5 text-white" />
+                    </div>
+                  </div>
+
+                  {/* Status Badge */}
+                  <div className="absolute top-4 left-4 flex items-center gap-2 px-3 py-1.5 rounded-full bg-slate-900/90 border border-slate-700">
+                    <div className="w-2 h-2 rounded-full bg-emerald-400 animate-pulse"></div>
+                    <span className="text-xs text-white font-medium">Connected</span>
+                  </div>
+                </div>
+
+                {/* Glow Effect */}
+                <div className="absolute -z-10 top-1/2 left-1/2 transform -translate-x-1/2 -translate-y-1/2 w-96 h-96 bg-emerald-600/20 rounded-full blur-3xl"></div>
+              </div>
             </div>
           </div>
-
-          {/* Glow Effect */}
-          <div className="absolute -z-10 top-1/2 left-1/2 transform -translate-x-1/2 -translate-y-1/2 w-96 h-96 bg-emerald-600/20 rounded-full blur-3xl"></div>
         </div>
-      </div>
-    </div>
-  </div>
-</section>
+      </section>
 
       {/* FEATURES SECTION*/}
       <section className="py-20 px-4 bg-slate-900/50 border-y border-slate-800">
@@ -270,18 +394,29 @@ export default function LandingPage() {
             Join millions of professionals connecting across the globe every day.
           </p>
           <div className="flex flex-col sm:flex-row gap-4 justify-center">
-            <button
-              onClick={() => handleNavigation("/auth")}
-              className="px-8 py-4 rounded-lg bg-emerald-600 cursor-pointer hover:bg-emerald-700 text-white font-medium text-lg transition"
-            >
-              Get Started Now
-            </button>
-            <button
-              onClick={() => handleNavigation("/aljk23")}
-              className="px-8 py-4 rounded-lg border-2 border-slate-700 cursor-pointer hover:border-emerald-600 text-white font-medium text-lg transition"
-            >
-              Join as Guest
-            </button>
+            {!isAuthenticated ? (
+              <>
+                <button
+                  onClick={() => handleNavigation('/auth')}
+                  className="px-8 py-4 rounded-lg bg-emerald-600 cursor-pointer hover:bg-emerald-700 text-white font-medium text-lg transition"
+                >
+                  Get Started Now
+                </button>
+                <button
+                  onClick={() => handleNavigation('/aljk23')}
+                  className="px-8 py-4 rounded-lg border-2 border-slate-700 cursor-pointer hover:border-emerald-600 text-white font-medium text-lg transition"
+                >
+                  Join as Guest
+                </button>
+              </>
+            ) : (
+              <button
+                onClick={() => handleNavigation('/home')}
+                className="px-8 py-4 rounded-lg bg-emerald-600 cursor-pointer hover:bg-emerald-700 text-white font-medium text-lg transition"
+              >
+                Go to Dashboard
+              </button>
+            )}
           </div>
         </div>
       </section>
@@ -291,7 +426,10 @@ export default function LandingPage() {
         <div className="max-w-7xl mx-auto">
           <div className="grid md:grid-cols-4 gap-8 mb-8">
             <div>
-              <div className="flex items-center gap-2 mb-4 cursor-pointer" onClick={() => handleNavigation("/")}>
+              <div
+                className="flex items-center gap-2 mb-4 cursor-pointer"
+                onClick={() => handleNavigation('/')}
+              >
                 <div className="w-8 h-8 rounded-lg bg-emerald-600 flex items-center justify-center">
                   <Video className="w-5 h-5 text-white" />
                 </div>
@@ -305,27 +443,45 @@ export default function LandingPage() {
             <div>
               <h4 className="font-semibold mb-4 text-white">Product</h4>
               <ul className="space-y-2 text-sm text-slate-400">
-                <li className="hover:text-white transition cursor-pointer">Features</li>
-                <li className="hover:text-white transition cursor-pointer">Pricing</li>
-                <li className="hover:text-white transition cursor-pointer">Security</li>
+                <li className="hover:text-white transition cursor-pointer">
+                  Features
+                </li>
+                <li className="hover:text-white transition cursor-pointer">
+                  Pricing
+                </li>
+                <li className="hover:text-white transition cursor-pointer">
+                  Security
+                </li>
               </ul>
             </div>
 
             <div>
               <h4 className="font-semibold mb-4 text-white">Company</h4>
               <ul className="space-y-2 text-sm text-slate-400">
-                <li className="hover:text-white transition cursor-pointer">About</li>
-                <li className="hover:text-white transition cursor-pointer">Blog</li>
-                <li className="hover:text-white transition cursor-pointer">Careers</li>
+                <li className="hover:text-white transition cursor-pointer">
+                  About
+                </li>
+                <li className="hover:text-white transition cursor-pointer">
+                  Blog
+                </li>
+                <li className="hover:text-white transition cursor-pointer">
+                  Careers
+                </li>
               </ul>
             </div>
 
             <div>
               <h4 className="font-semibold mb-4 text-white">Legal</h4>
               <ul className="space-y-2 text-sm text-slate-400">
-                <li className="hover:text-white transition cursor-pointer">Privacy</li>
-                <li className="hover:text-white transition cursor-pointer">Terms</li>
-                <li className="hover:text-white transition cursor-pointer">Contact</li>
+                <li className="hover:text-white transition cursor-pointer">
+                  Privacy
+                </li>
+                <li className="hover:text-white transition cursor-pointer">
+                  Terms
+                </li>
+                <li className="hover:text-white transition cursor-pointer">
+                  Contact
+                </li>
               </ul>
             </div>
           </div>

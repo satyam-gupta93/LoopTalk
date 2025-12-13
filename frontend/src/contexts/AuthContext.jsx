@@ -41,7 +41,7 @@ export const AuthProvider = ({ children }) => {
             if (request.status === httpStatus.OK) {
                 localStorage.setItem("token", request.data.token);
                 setUserData(request.data.user);
-                navigate("/home");
+                navigate("/");
             }
         } catch (err) {
             throw err;
