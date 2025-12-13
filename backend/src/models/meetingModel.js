@@ -4,9 +4,9 @@ import mongoose, { Schema } from "mongoose";
 const mettingSchema = new Schema({
     user_id : {type:String},
     meetingCode : {type:String,require:true},
-    date:{type:date,default:date.now(),require:true}
+    date:{type:Date,default:Date.now(),require:true}
 })
 
-const Metting = mongoose.model("Meeting",mettingSchema);
+const Meeting = mongoose.model("Meeting",mettingSchema);
 
-export {Metting}
+export {Meeting}

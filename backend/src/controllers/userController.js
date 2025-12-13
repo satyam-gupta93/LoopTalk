@@ -1,5 +1,5 @@
-
 import { User } from "../models/userModel.js";
+import { Meeting } from "../models/meetingModel.js";
 import httpStatus from "http-status";
 import bcrypt from "bcrypt";
 import crypto from "crypto";
@@ -92,36 +92,108 @@ const login = async (req, res) => {
   }
 };
 
-const getUserHistory = async (req, res) => {
-    const { token } = req.query;
+// const getUserHistory = async (req, res) => {
+//     const { token } = req.query;
 
-    try {
-        const user = await User.findOne({ token: token });
-        const meetings = await Meeting.find({ user_id: user.username })
-        res.json(meetings)
-    } catch (e) {
-        res.json({ message: `Something went wrong ${e}` })
+//     try {
+//         const user = await User.findOne({ token: token });
+//         const meetings = await Meeting.find({ user_id: user.username })
+//         res.json(meetings)
+//     } catch (e) {
+//         res.json({ message: `Something went wrong ${e}` })
+//     }
+// }
+
+
+const getUserHistory = async (req, res) => {
+  const { token } = req.query;
+
+  try {
+    const user = await User.findOne({ token });
+
+    if (!user) {
+      return res.status(401).json({
+        success: false,
+        message: "Invalid token"
+      });
     }
-}
+
+    const meetings = await Meeting.find({ user_id: user.username })
+      .sort({ date: -1 });
+
+    return res.json(meetings);
+
+  } catch (error) {
+    return res.status(500).json({
+      success: false,
+      message: "Server error"
+    });
+  }
+};
+
+
+// const addToHistory = async (req, res) => {
+//     const { token, meeting_code } = req.body;
+
+//     try {
+//         const user = await User.findOne({ token: token });
+
+//         const newMeeting = new Meeting({
+//             user_id: user.username,
+//             meetingCode: meeting_code
+//         })
+
+//         await newMeeting.save();
+
+//         res.status(httpStatus.CREATED).json({ message: "Added code to history" })
+//     } catch (e) {
+//         res.json({ message: `Something went wrong ${e}` })
+//     }
+// }
 
 const addToHistory = async (req, res) => {
-    const { token, meeting_code } = req.body;
+  const { token, meeting_code } = req.body;
 
-    try {
-        const user = await User.findOne({ token: token });
+  if (!token || !meeting_code) {
+    return res.status(400).json({
+      success: false,
+      message: "Token or meeting code missing"
+    });
+  }
 
-        const newMeeting = new Meeting({
-            user_id: user.username,
-            meetingCode: meeting_code
-        })
+  try {
+    const user = await User.findOne({ token });
 
-        await newMeeting.save();
-
-        res.status(httpStatus.CREATED).json({ message: "Added code to history" })
-    } catch (e) {
-        res.json({ message: `Something went wrong ${e}` })
+    if (!user) {
+      return res.status(401).json({
+        success: false,
+        message: "Invalid token"
+      });
     }
-}
+
+    const newMeeting = new Meeting({
+      user_id: user.username,
+      meetingCode: meeting_code
+    });
+
+    await newMeeting.save();
+
+    console.log("Meeting saved:", newMeeting);
+
+    return res.status(201).json({
+      success: true,
+      message: "Meeting added to history"
+    });
+
+  } catch (error) {
+    console.error("Error saving meeting:", error);
+    return res.status(500).json({
+      success: false,
+      message: "Server error"
+    });
+  }
+};
 
 
-export {login,register}
+
+export { login, register, getUserHistory, addToHistory }
