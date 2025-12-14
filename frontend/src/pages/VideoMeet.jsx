@@ -708,7 +708,7 @@ import {
   X
 } from 'lucide-react';
 
-const server_url = `${server}`;
+const server_url = server;
 
 var connections = {};
 
