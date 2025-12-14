@@ -694,6 +694,7 @@
 
 import React, { useEffect, useRef, useState } from 'react'
 import io from "socket.io-client";
+import server from '../../environment';
 import { 
   Video,
   VideoOff,
@@ -707,7 +708,7 @@ import {
   X
 } from 'lucide-react';
 
-const server_url = "http://localhost:8000";
+const server_url = `${server}`;
 
 var connections = {};
 
