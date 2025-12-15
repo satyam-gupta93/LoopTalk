@@ -10,7 +10,6 @@ const UserRouter = Router();
 UserRouter.post("/login", login);
 UserRouter.post("/register", register);
 
-// Activity Routes 
 
 UserRouter.post("/add-to-activity", addToHistory);
 UserRouter.get("/get-all-activity", getUserHistory);

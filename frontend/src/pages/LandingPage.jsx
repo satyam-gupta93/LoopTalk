@@ -87,7 +87,7 @@ export default function LandingPage() {
               {!isAuthenticated ? (
                 <>
                   <button
-                    onClick={() => handleNavigation('/aljk23')}
+                    onClick={() => handleNavigation('/aljk24')}
                     className="text-slate-300 hover:text-white transition cursor-pointer"
                   >
                     Join as Guest
