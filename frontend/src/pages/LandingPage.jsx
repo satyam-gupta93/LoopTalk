@@ -1274,7 +1274,7 @@ export default function LandingPage() {
               {!isAuthenticated ? (
                 <>
                   <button
-                    onClick={() => handleMobileNavClick('/aljk23')}
+                    onClick={() => handleMobileNavClick('/aljk24')}
                     className="block w-full text-left px-4 py-2 text-slate-300 hover:text-white transition"
                   >
                     Join as Guest
@@ -1407,7 +1407,7 @@ export default function LandingPage() {
                       Get Started Free <ArrowRight size={20} />
                     </button>
                     <button
-                      onClick={() => handleNavigation('/aljk23')}
+                      onClick={() => handleNavigation('/aljk24')}
                       className="inline-flex items-center justify-center gap-2 cursor-pointer px-6 py-3 sm:px-8 sm:py-4 rounded-lg border-2 border-slate-700 hover:border-emerald-600 text-white font-medium text-base sm:text-lg transition"
                     >
                       Join as Guest
