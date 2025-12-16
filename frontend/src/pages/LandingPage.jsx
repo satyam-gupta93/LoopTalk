@@ -1344,7 +1344,7 @@ export default function LandingPage() {
               {/* --- END OF REPLACEMENT --- */}
 
               <div className="relative w-full max-w-sm sm:max-w-md">
-                <div className="relative z-10 w-full h-70 rounded-3xl bg-slate-900 border border-slate-800 overflow-hidden shadow-2xl">
+                <div className="relative z-10 w-full h-80 rounded-3xl bg-slate-900 border border-slate-800 overflow-hidden shadow-2xl">
                   <div className="absolute inset-0 flex items-center justify-center">
                     <Video className="w-16 h-16 text-emerald-500 animate-pulse" />
                   </div>
