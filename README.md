@@ -129,22 +129,19 @@ npm start -->
 
 <br/>
 
-```
-██╗      ██████╗  ██████╗ ██████╗ ████████╗ █████╗ ██╗     ██╗  ██╗
-██║     ██╔═══██╗██╔═══██╗██╔══██╗╚══██╔══╝██╔══██╗██║     ██║ ██╔╝
-██║     ██║   ██║██║   ██║██████╔╝   ██║   ███████║██║     █████╔╝
-██║     ██║   ██║██║   ██║██╔═══╝    ██║   ██╔══██║██║     ██╔═██╗
-███████╗╚██████╔╝╚██████╔╝██║        ██║   ██║  ██║███████╗██║  ██╗
-╚══════╝ ╚═════╝  ╚═════╝ ╚═╝        ╚═╝   ╚═╝  ╚═╝╚══════╝╚═╝  ╚═╝
-```
+# 🟢 LoopTalk
 
-**Where common ground is found.**
+### Where common ground is found.
 
-[![Node.js](https://img.shields.io/badge/Node.js-339933?style=flat-square&logo=node.js&logoColor=white)](https://nodejs.org)
-[![React](https://img.shields.io/badge/React-61DAFB?style=flat-square&logo=react&logoColor=black)](https://react.dev)
-[![Socket.IO](https://img.shields.io/badge/Socket.IO-010101?style=flat-square&logo=socket.io&logoColor=white)](https://socket.io)
-[![WebRTC](https://img.shields.io/badge/WebRTC-333333?style=flat-square&logo=webrtc&logoColor=white)](https://webrtc.org)
-[![Express](https://img.shields.io/badge/Express.js-000000?style=flat-square&logo=express&logoColor=white)](https://expressjs.com)
+*A real-time video conferencing and chat application*
+
+<br/>
+
+[![Node.js](https://img.shields.io/badge/Node.js-339933?style=for-the-badge&logo=node.js&logoColor=white)](https://nodejs.org)
+[![React](https://img.shields.io/badge/React-61DAFB?style=for-the-badge&logo=react&logoColor=black)](https://react.dev)
+[![Socket.IO](https://img.shields.io/badge/Socket.IO-010101?style=for-the-badge&logo=socket.io&logoColor=white)](https://socket.io)
+[![WebRTC](https://img.shields.io/badge/WebRTC-333333?style=for-the-badge&logo=webrtc&logoColor=white)](https://webrtc.org)
+[![Express](https://img.shields.io/badge/Express.js-000000?style=for-the-badge&logo=express&logoColor=white)](https://expressjs.com)
 
 <br/>
 
@@ -175,59 +172,56 @@ Built with **WebRTC** for peer-to-peer media transfer and **Socket.IO** for sign
 
 ## 🛠 Tech Stack
 
-```
-┌─────────────────────────────────────────────┐
-│                  FRONTEND                   │
-│                  React.js                   │
-├─────────────────────────────────────────────┤
-│                  BACKEND                    │
-│           Node.js  ·  Express.js            │
-├─────────────────────────────────────────────┤
-│            REAL-TIME LAYER                  │
-│          Socket.IO  ·  WebRTC               │
-└─────────────────────────────────────────────┘
-```
+<div align="center">
+
+### 🖥 Frontend
+
+![React](https://img.shields.io/badge/React-20232A?style=for-the-badge&logo=react&logoColor=61DAFB)
+
+### ⚙️ Backend
+
+![NodeJS](https://img.shields.io/badge/Node.js-6DA55F?style=for-the-badge&logo=node.js&logoColor=white)
+![Express.js](https://img.shields.io/badge/Express.js-404D59?style=for-the-badge&logo=express&logoColor=white)
+
+### 📡 Real-Time Communication
+
+![Socket.io](https://img.shields.io/badge/Socket.IO-black?style=for-the-badge&logo=socket.io&badgeColor=010101)
+![WebRTC](https://img.shields.io/badge/WebRTC-333333?style=for-the-badge&logo=webrtc&logoColor=white)
+
+</div>
 
 ---
 
 ## 🏗 System Architecture
 
-LoopTalk operates in two coordinated layers:
-
 ```
-  CLIENT A                                    CLIENT B
-     │                                           │
-     │──── join-room ──▶ SIGNALING SERVER ◀──────│
-     │                        │                  │
-     │◀──── offer/answer ─────┤─── offer/answer ─│
-     │                        │                  │
-     │◀──────────── ICE candidates ──────────────│
-     │                                           │
-     │◀════════ P2P WebRTC Connection ══════════▶│
-     │              (media streams)              │
+  CLIENT A                                        CLIENT B
+     │                                               │
+     │──── join-room ──▶  [SIGNALING SERVER]  ◀──────│
+     │                           │                   │
+     │◀────── offer/answer ──────┤──── offer/answer ─│
+     │                           │                   │
+     │◀──────────────── ICE candidates ──────────────│
+     │                                               │
+     │◀═══════════ P2P WebRTC Connection ════════════│
+     │                (media streams)                │
 ```
 
-**Signaling** is handled by the Socket.IO server.
-**Media** flows directly peer-to-peer via WebRTC — the server never touches your video.
+> Signaling is handled by the Socket.IO server.
+> Media flows **directly peer-to-peer** — the server never touches your video.
 
 ---
 
 ## ⚙️ How It Works
 
 ```
-1. User joins a room via Room ID
-        ↓
-2. Signaling server registers the user in that room
-        ↓
-3. Offer / Answer messages are exchanged via server
-        ↓
-4. ICE candidates are negotiated between peers
-        ↓
-5. WebRTC peer-to-peer connection is established
-        ↓
-6. Video & audio stream directly between users
-        ↓
-7. Chat messages broadcast via Socket.IO in real-time
+ Step 1 → User joins a room via Room ID
+ Step 2 → Signaling server registers the user in that room
+ Step 3 → Offer / Answer messages are exchanged via server
+ Step 4 → ICE candidates are negotiated between peers
+ Step 5 → WebRTC peer-to-peer connection is established
+ Step 6 → Video & audio stream directly between users
+ Step 7 → Chat messages broadcast via Socket.IO in real-time
 ```
 
 ---
@@ -235,18 +229,18 @@ LoopTalk operates in two coordinated layers:
 ## 🔗 WebRTC Connection Flow
 
 ```
-User A                  Server                  User B
-  │                       │                       │
-  │──── create offer ────▶│                       │
-  │                       │──── forward offer ───▶│
-  │                       │                       │── create answer
-  │                       │◀─── send answer ──────│
-  │◀─── forward answer ───│                       │
-  │                       │                       │
-  │◀════ ICE candidates exchanged ════════════════│
-  │                                               │
-  │◀══════════ P2P Connection Established ════════│
-  │◀══════════════ Media Streams Flow ════════════│
+ User A               Server               User B
+   │                    │                    │
+   │── create offer ───▶│                    │
+   │                    │── forward offer ──▶│
+   │                    │                    │── create answer
+   │                    │◀── send answer ────│
+   │◀── forward answer ─│                    │
+   │                    │                    │
+   │◀──────────── ICE candidates exchanged ──│
+   │                                         │
+   │◀════════ P2P Connection Established ════│
+   │◀════════════ Media Streams Flow ════════│
 ```
 
 ---
@@ -281,7 +275,7 @@ npm start
 ## 🗂 Room Management
 
 - Users join rooms using a **unique Room ID**
-- Only users sharing the same Room ID can see and chat with each other
+- Only users sharing the same Room ID can communicate
 - The server tracks all active users per room
 - New users automatically connect to all existing room participants
 
