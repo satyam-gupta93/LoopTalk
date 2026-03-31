@@ -97,7 +97,7 @@ export default function Authentication() {
                 setFormState(0);
                 setError('');
               }}
-              className={`flex-1 py-3 px-6 rounded-md font-medium transition ${
+              className={`flex-1 py-3 px-6 rounded-md cursor-pointer font-medium transition ${
                 formState === 0
                   ? 'bg-emerald-600 text-white'
                   : 'text-slate-400 hover:text-white'
@@ -110,7 +110,7 @@ export default function Authentication() {
                 setFormState(1);
                 setError('');
               }}
-              className={`flex-1 py-3 px-6 rounded-md font-medium transition ${
+              className={`flex-1 py-3 px-6 cursor-pointer rounded-md font-medium transition ${
                 formState === 1
                   ? 'bg-emerald-600 text-white'
                   : 'text-slate-400 hover:text-white'
@@ -195,7 +195,7 @@ export default function Authentication() {
             {/* Submit Button */}
             <button
               onClick={handleAuth}
-              className="w-full py-3 px-6 bg-emerald-600 hover:bg-emerald-700 text-white font-medium rounded-lg transition focus:outline-none focus:ring-2 focus:ring-emerald-500 focus:ring-offset-2 focus:ring-offset-slate-950"
+              className="w-full py-3 px-6 cursor-pointer bg-emerald-600 hover:bg-emerald-700 text-white font-medium rounded-lg transition focus:outline-none focus:ring-2 focus:ring-emerald-500 focus:ring-offset-2 focus:ring-offset-slate-950"
             >
               {formState === 0 ? 'Sign In' : 'Create Account'}
             </button>

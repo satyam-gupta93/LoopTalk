@@ -51,16 +51,18 @@ export default function History() {
             <nav className="fixed w-full top-0 z-50 bg-slate-950/90 backdrop-blur-sm border-b border-slate-800">
                 <div className="max-w-7xl mx-auto px-4 sm:px-6 lg:px-8">
                     <div className="flex justify-between items-center h-16">
-                        {/* Logo */}
-                        <div 
-                            className="flex items-center gap-3 cursor-pointer"
-                            onClick={() => navigate("/")}
-                        >
-                            <div className="w-9 h-9 rounded-lg bg-emerald-600 flex items-center justify-center">
-                                <Video className="w-5 h-5 text-white" />
-                            </div>
-                            <h2 className="text-xl font-semibold text-white">Loop Talk</h2>
-                        </div>
+                    {/* Logo */}
+                    <div 
+                    className="flex items-center gap-3 cursor-pointer"
+                    onClick={() => navigate("/")}
+                    >
+                    <img 
+                        src="/logo_2.svg" 
+                        alt="Loop Talk Logo" 
+                        className="h-10 w-auto object-contain"
+                    />
+                    <h2 className="text-2xl font-bold text-white">Loop Talk</h2>
+                    </div>
 
                         {/* Back to Home Button */}
                         <button
@@ -68,7 +70,7 @@ export default function History() {
                             className="flex items-center gap-2 px-4 py-2 rounded-lg text-slate-300 hover:text-white hover:bg-slate-900 transition"
                         >
                             <Home className="w-4 h-4" />
-                            <span className="hidden sm:inline">Back to Home</span>
+                            <span className="hidden sm:inline cursor-pointer">Back to Home</span>
                         </button>
                     </div>
                 </div>
