@@ -204,8 +204,8 @@ User A                  Server                  User B
   |---- create offer ---->|                       |
   |                       |---- forward offer --->|
   |                       |                       |--- create answer
-  |                       |<--- send answer -------|
-  |<--- forward answer ----|                       |
+  |                       |<--- send answer ------|
+  |<--- forward answer ---|                       |
   |                       |                       |
   |<----------- ICE candidates exchanged -------->|
   |                                               |
