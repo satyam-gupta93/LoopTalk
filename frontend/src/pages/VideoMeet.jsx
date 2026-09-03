@@ -12,7 +12,10 @@ import {
   MonitorX,
   MessageSquare,
   Send,
-  X
+  X,
+  Copy,
+  Check,
+  Users
 } from 'lucide-react';
 
 const server_url = server;
@@ -41,13 +44,14 @@ const VideoMeet = () => {
     let [video, setVideo] = useState([]);
     let [audio, setAudio] = useState();
     let [screen, setScreen] = useState();
-    let [showModal, setModal] = useState(true);
+    let [showModal, setModal] = useState(false);
     let [screenAvailable, setScreenAvailable] = useState();
     let [messages, setMessages] = useState([])
     let [message, setMessage] = useState("");
-    let [newMessages, setNewMessages] = useState(3);
+    let [newMessages, setNewMessages] = useState(0);
     let [askForUsername, setAskForUsername] = useState(true);
     let [username, setUsername] = useState("");
+    let [copied, setCopied] = useState(false);
 
     const videoRef = useRef([])
     let [videos, setVideos] = useState([])
@@ -250,13 +254,14 @@ const VideoMeet = () => {
     }
 
     let connectToSocketServer = () => {
-        socketRef.current = io.connect(server_url, { secure: false })
+        socketRef.current = io.connect(server_url, { secure: false, transports: ['websocket', 'polling'] })
 
         socketRef.current.on('signal', gotMessageFromServer)
 
         socketRef.current.on('connect', () => {
-            // NEW: Send username along with join-call
-            socketRef.current.emit('join-call', window.location.href, username)
+            const roomCode = window.location.pathname.replace(/^\//, '') || 'default-room';
+            // Send clean room code along with join-call
+            socketRef.current.emit('join-call', roomCode, username)
             socketIdRef.current = socketRef.current.id
 
             socketRef.current.on('chat-message', addMessage)
@@ -428,16 +433,33 @@ const VideoMeet = () => {
 
 let connect = () => {
     setAskForUsername(false);
-
-    // 1️⃣ Create socket connection FIRST
-    socketRef.current = io.connect(server_url, { secure: false });
-
-    // 2️⃣ Now send username
-    socketRef.current.emit("set-username", username);
-
-    // 3️⃣ Now start webcam + WebRTC
     getMedia();
 }
+
+    const copyMeetingLink = () => {
+        navigator.clipboard.writeText(window.location.href);
+        setCopied(true);
+        setTimeout(() => setCopied(false), 2000);
+    };
+
+    const getGridContainerClass = (count) => {
+        if (count === 1) {
+            return "grid-cols-1 max-w-4xl max-h-[75vh]";
+        }
+        if (count === 2) {
+            return "grid-cols-1 md:grid-cols-2 max-w-5xl max-h-[75vh]";
+        }
+        if (count === 3) {
+            return "grid-cols-1 sm:grid-cols-2 lg:grid-cols-3 max-w-6xl";
+        }
+        if (count === 4) {
+            return "grid-cols-1 sm:grid-cols-2 max-w-5xl";
+        }
+        if (count <= 6) {
+            return "grid-cols-1 sm:grid-cols-2 lg:grid-cols-3 max-w-7xl";
+        }
+        return "grid-cols-1 sm:grid-cols-2 md:grid-cols-3 lg:grid-cols-4 max-w-7xl";
+    };
 
   return (
      <div className="min-h-screen bg-slate-950">
@@ -555,41 +577,66 @@ let connect = () => {
                     )}
 
                     <div className="relative h-screen flex flex-col">
-                        <div className="flex-1 grid grid-cols-1 md:grid-cols-2 lg:grid-cols-3 gap-4 p-4 bg-slate-950">
-                            {videos.map((video) => (
-                                <div 
-                                    key={video.socketId}
-                                    className="relative rounded-xl overflow-hidden bg-slate-900 border border-slate-800 shadow-xl"
-                                >
-                                    <video
-                                        data-socket={video.socketId}
-                                        ref={ref => {
-                                            if (ref && video.stream) {
-                                                ref.srcObject = video.stream;
-                                            }
-                                        }}
-                                        autoPlay
-                                        className="w-full h-full object-cover"
-                                    />
-                                    <div className="absolute bottom-3 left-3 px-3 py-1.5 w-28 rounded-full bg-slate-900/90 border border-slate-700 text-center">
-                                        <span className="text-xs text-white font-medium truncate block">
-                                            {participants[video.socketId] || 'Unknown'}
-                                        </span>
+                        <div className="relative flex-1 w-full h-[calc(100vh-100px)] flex items-center justify-center p-3 sm:p-6">
+                            {videos.length === 0 ? (
+                                /* State when User is alone in the room */
+                                <div className="flex flex-col items-center justify-center text-center p-6 space-y-4 max-w-md bg-slate-900/60 border border-slate-800/80 backdrop-blur-md rounded-3xl shadow-xl">
+                                    <div className="w-16 h-16 rounded-2xl bg-emerald-950/80 border border-emerald-800/50 flex items-center justify-center text-emerald-400">
+                                        <Users className="w-8 h-8" />
                                     </div>
-
+                                    <div className="space-y-1">
+                                        <h3 className="text-xl font-bold text-white">You're the only one here</h3>
+                                        <p className="text-sm text-slate-400">Share this meeting link with others to start talking.</p>
+                                    </div>
+                                    <button
+                                        onClick={copyMeetingLink}
+                                        className="px-5 py-2.5 rounded-xl bg-slate-800 hover:bg-slate-700 border border-slate-700 text-white font-medium text-sm transition flex items-center gap-2 cursor-pointer"
+                                    >
+                                        {copied ? <Check className="w-4 h-4 text-emerald-400" /> : <Copy className="w-4 h-4 text-slate-300" />}
+                                        <span>{copied ? "Link Copied!" : "Copy Meeting Link"}</span>
+                                    </button>
                                 </div>
-                            ))}
-                        </div>
+                            ) : (
+                                /* Dynamic Adaptive Responsive Grid based on connected users count */
+                                <div className={`w-full h-full grid gap-3 sm:gap-4 items-center justify-center mx-auto transition-all duration-300 ${getGridContainerClass(videos.length)}`}>
+                                    {videos.map((video) => (
+                                        <div 
+                                            key={video.socketId}
+                                            className="relative w-full h-full min-h-[220px] aspect-video rounded-2xl overflow-hidden bg-slate-900 border border-slate-800 shadow-2xl flex items-center justify-center group"
+                                        >
+                                            <video
+                                                data-socket={video.socketId}
+                                                ref={ref => {
+                                                    if (ref && video.stream) {
+                                                        ref.srcObject = video.stream;
+                                                    }
+                                                }}
+                                                autoPlay
+                                                playsInline
+                                                className="w-full h-full object-cover"
+                                            />
+                                            <div className="absolute bottom-3 left-3 px-3 py-1.5 max-w-[80%] rounded-full bg-slate-950/85 backdrop-blur-md border border-slate-700/80 text-center shadow-lg">
+                                                <span className="text-xs text-white font-medium truncate block">
+                                                    {participants[video.socketId] || 'Unknown'}
+                                                </span>
+                                            </div>
+                                        </div>
+                                    ))}
+                                </div>
+                            )}
 
-                        <div className="absolute bottom-24 right-4 w-64 rounded-xl overflow-hidden bg-slate-900 border-2 border-slate-800 shadow-2xl">
-                            <video 
-                                ref={localVideoref} 
-                                autoPlay 
-                                muted
-                                className="w-full h-full object-cover"
-                            />
-                            <div className="absolute top-2 left-2 px-2 py-1 rounded-full bg-slate-900/90 border border-slate-700">
-                                <span className="text-xs text-white font-medium">{username} (You)</span>
+                            {/* Local User Picture-in-Picture (PiP) Window */}
+                            <div className="absolute bottom-4 right-4 sm:bottom-6 sm:right-6 w-32 sm:w-48 md:w-56 aspect-video rounded-xl sm:rounded-2xl overflow-hidden bg-slate-900 border-2 border-slate-700/80 shadow-2xl z-20 group">
+                                <video 
+                                    ref={localVideoref} 
+                                    autoPlay 
+                                    muted
+                                    playsInline
+                                    className="w-full h-full object-cover scale-x-[-1]"
+                                />
+                                <div className="absolute top-2 left-2 px-2 py-0.5 rounded-full bg-slate-950/85 backdrop-blur-md border border-slate-700/80">
+                                    <span className="text-[10px] sm:text-xs text-white font-medium">{username || 'You'} (You)</span>
+                                </div>
                             </div>
                         </div>
 
