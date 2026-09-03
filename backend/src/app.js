@@ -3,7 +3,7 @@ import { createServer } from "http";
 import dotenv from "dotenv";
 import mongoose from "mongoose";
 import cors from "cors";
-import connectToSocket, { initMediasoupWorkers } from "./controllers/mediasoupController.js";
+import connectTosocket from "./controllers/socketManger.js";
 import UserRouter from "./routes/userRoutes.js";
 
 // load env
@@ -17,9 +17,9 @@ app.use(cors());
 app.use(express.json({ limit: "40kb" }));
 app.use(express.urlencoded({ limit: "40kb", extended: true }));
 
-// attach Socket.IO with Mediasoup SFU
+// attach Socket.IO
 const server = createServer(app);
-const io = connectToSocket(server);
+const io = connectTosocket(server);
 
 app.get("/home", (req, res) => {
     return res.json({ "hello": "world" });
@@ -31,12 +31,9 @@ const start = async () => {
         const connectionDB = await mongoose.connect(process.env.MONGO_URI);
         console.log(`connection db Host :${connectionDB.connection.host}`);
 
-        // Initialize Mediasoup SFU Workers
-        await initMediasoupWorkers();
-
         const PORT = process.env.PORT || 8000;
         server.listen(PORT, () => {
-            console.log(`LoopTalk SFU Server running on Port ${PORT}`);
+            console.log(`LoopTalk Server running on Port ${PORT}`);
         });
     } catch (error) {
         console.error("Error starting server:", error);
